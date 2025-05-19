@@ -47,6 +47,12 @@ force_single_line = false
 line-length = 88
 target-version = "py311"
 fix = true
+exclude = [
+  ".bzr", ".direnv", ".eggs", ".git", ".git-rewrite", ".hg", ".ipynb_checkpoints", ".mypy_cache",
+  ".nox", ".pants.d", ".pyenv", ".pytest_cache", ".pytype", ".ruff_cache", ".svn", ".tox", ".venv",
+  ".vscode", "__pypackages__", "_build", "buck-out", "build", "dist", "node_modules", "site-packages", "venv",
+  ".gitignore", ".env", ".env.example", ".gitlab-ci.yml", ".toml", ".lock", "Makefile", ".md"
+]
 
 [tool.ruff.lint]
 select = [
@@ -63,11 +69,3 @@ ignore = []
 known-first-party = ["app"]
 force-single-line = false
 combine-as-imports = true
-
-[tool.ruff.exclude]
-files = [
-  ".bzr", ".direnv", ".eggs", ".git", ".git-rewrite", ".hg", ".ipynb_checkpoints", ".mypy_cache",
-  ".nox", ".pants.d", ".pyenv", ".pytest_cache", ".pytype", ".ruff_cache", ".svn", ".tox", ".venv",
-  ".vscode", "__pypackages__", "_build", "buck-out", "build", "dist", "node_modules", "site-packages", "venv",
-  ".gitignore", ".env", ".env.example", ".toml", ".lock", "Makefile", ".md", "LICENSE", ".yml", ".sh", "Dockerfile"
-]
