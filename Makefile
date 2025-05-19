@@ -36,7 +36,7 @@ help: ##@Help Show this help
 	@perl -e '$(HELP_FUN)' $(MAKEFILE_LIST)
 
 lint:  ##@Code Check code with ruff
-	poetry run ruff check .
+	poetry run ruff check . --fix
 
 format:  ##@Code Reformat code with ruff, isort, black
 	poetry run isort .
