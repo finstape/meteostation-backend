@@ -18,7 +18,7 @@ sqlalchemy-utils = "^0.41.2"
 alembic = "^1.13.1"
 uvicorn = "^0.34.2"
 asyncpg = "^0.29.0"
-psycopg2-binary = "^2.9.10"
+psycopg = {extras = ["binary"], version = "^3.2.9"}
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.1"
