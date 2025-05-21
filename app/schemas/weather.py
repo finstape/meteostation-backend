@@ -39,3 +39,8 @@ class WeatherCurrentResponse(BaseModel):
     central: CentralData
     outdoor: SensorData
     external_weather: ExternalData
+
+
+class WeatherPredictionResponse(BaseModel):
+    predicted_temp: float = Field(..., title="Predicted temperature")
+    predicted_rain: bool = Field(..., title="Predicted rain")

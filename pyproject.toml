@@ -19,6 +19,9 @@ alembic = "^1.13.1"
 uvicorn = "^0.34.2"
 asyncpg = "^0.29.0"
 psycopg = {extras = ["binary"], version = "^3.2.9"}
+joblib = "^1.5.0"
+pandas = "^2.2.3"
+scikit-learn = "^1.6.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.1"
@@ -60,7 +63,6 @@ exclude = [
 select = [
   "E",  # pycodestyle errors
   "F",  # pyflakes
-  "I",  # isort
   "B",  # bugbear
   "UP",  # pyupgrade
   "SIM",  # simplify
