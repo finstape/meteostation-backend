@@ -53,4 +53,6 @@ alembic upgrade head
 
 export PGPASSWORD=$POSTGRES_PASSWORD
 
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" --host "$POSTGRES_HOST" < /app/docker/fill_data.sql
+
 poetry run uvicorn app.__main__:app --host 0.0.0.0 --port 8000 --reload
