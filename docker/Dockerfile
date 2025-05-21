@@ -17,7 +17,6 @@ COPY pyproject.toml poetry.lock /app/
 RUN poetry config virtualenvs.create false && poetry install --only main
 
 COPY . .
+COPY .env.example .env
 
 RUN chmod +x /app/docker/server-entrypoint.sh
-
-COPY .env.example .env
