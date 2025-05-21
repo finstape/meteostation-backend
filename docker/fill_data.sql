@@ -1,7 +1,7 @@
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM settings WHERE key = 'admin_telegram_id') THEN
-        INSERT INTO settings (key, value, type, description)
+        INSERT INTO settings (key, value, type)
         VALUES ('admin_telegram_id', '12345678', 'int');
     END IF;
 
