@@ -25,6 +25,7 @@ class DefaultSettings(BaseSettings):
     POSTGRES_PASSWORD: str = environ.get("POSTGRES_PASSWORD", "hackme")
     DB_CONNECT_RETRY: int = environ.get("DB_CONNECT_RETRY", 20)
     DB_POOL_SIZE: int = environ.get("DB_POOL_SIZE", 15)
+    USE_LOCAL_DB: int = int(environ.get("USE_LOCAL_DB", 0))
 
     @property
     def database_settings(self) -> dict:
