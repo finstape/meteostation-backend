@@ -5,8 +5,8 @@ from starlette import status
 
 from app.db.connection import get_session
 from app.schemas import SettingPatchWithKey
-from app.utils.queries import save_multiple_settings
 from app.utils.common import create_postgres_backup
+from app.utils.queries import save_multiple_settings
 
 api_router = APIRouter(tags=["Setting"])
 
@@ -17,8 +17,8 @@ api_router = APIRouter(tags=["Setting"])
     description="Upload data from sensors (central, outdoor, external)",
 )
 async def patch_multiple_settings(
-        payload: list[SettingPatchWithKey],
-        session: AsyncSession = Depends(get_session),  # noqa: B008
+    payload: list[SettingPatchWithKey],
+    session: AsyncSession = Depends(get_session),  # noqa: B008
 ):
     """
     Update multiple settings in the database
