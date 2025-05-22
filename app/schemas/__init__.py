@@ -3,6 +3,7 @@ from app.schemas.weather import (
     CentralData,
     ExternalData,
     SensorData,
+    SensorInterval,
     WeatherCurrentResponse,
     WeatherPredictionResponse,
     WeatherUploadRequest,
@@ -16,4 +17,5 @@ __all__ = [
     "WeatherCurrentResponse",
     "WeatherPredictionResponse",
     "WeatherUploadRequest",
+    "SensorInterval",
 ]

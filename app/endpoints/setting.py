@@ -14,7 +14,7 @@ api_router = APIRouter(tags=["Setting"])
 @api_router.patch(
     "/settings",
     status_code=status.HTTP_200_OK,
-    description="Upload data from sensors (central, outdoor, external)",
+    description="Update multiple settings",
 )
 async def patch_multiple_settings(
     payload: list[SettingPatchWithKey],

@@ -7,12 +7,13 @@ from app.schemas import (
     CentralData,
     ExternalData,
     SensorData,
+    SensorInterval,
     WeatherCurrentResponse,
     WeatherPredictionResponse,
     WeatherUploadRequest,
 )
 from app.utils.common import new_data_logic
-from app.utils.queries import get_last_data_for_sensors
+from app.utils.queries import get_last_data_for_sensors, get_setting_by_key
 from app.utils.weather_predict import get_data_weather_prediction
 
 api_router = APIRouter(tags=["Weather"])
@@ -81,3 +82,22 @@ async def upload_weather_data(
     """
     await new_data_logic(session=session, payload=payload)
     return
+
+
+@api_router.get(
+    "weather/interval",
+    status_code=status.HTTP_200_OK,
+    response_model=SensorInterval,
+    description="Get interval for sensor polling",
+)
+async def get_sensor_poll_interval(
+    session: AsyncSession = Depends(get_session),  # noqa: B008
+):
+    """
+    Get the interval for sensor polling
+
+    Args:
+        session (AsyncSession): The database session
+    """
+    interval = await get_setting_by_key(session, "sensor_poll_interval_ms")
+    return SensorInterval(sensor_poll_interval_ms=interval)
