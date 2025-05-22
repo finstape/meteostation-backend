@@ -25,7 +25,7 @@ api_router = APIRouter(tags=["Weather"])
     description="Get current weather",
 )
 async def get_current_weather(
-    session: AsyncSession = Depends(get_session), # noqa: B008
+    session: AsyncSession = Depends(get_session),  # noqa: B008
 ):
     """
     Get current weather data based on the last data
@@ -51,7 +51,7 @@ async def get_current_weather(
     description="Get weather prediction",
 )
 async def get_weather_prediction(
-    session: AsyncSession = Depends(get_session), # noqa: B008
+    session: AsyncSession = Depends(get_session),  # noqa: B008
 ):
     """
     Get weather prediction based on the last data
@@ -70,7 +70,7 @@ async def get_weather_prediction(
 )
 async def upload_weather_data(
     payload: WeatherUploadRequest,
-    session: AsyncSession = Depends(get_session), # noqa: B008
+    session: AsyncSession = Depends(get_session),  # noqa: B008
 ):
     """
     Upload weather data to the database

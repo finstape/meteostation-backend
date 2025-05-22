@@ -16,7 +16,7 @@ api_router = APIRouter(tags=["Setting"])
 )
 async def patch_multiple_settings(
     payload: list[SettingPatchWithKey],
-    session: AsyncSession = Depends(get_session), # noqa: B008
+    session: AsyncSession = Depends(get_session),  # noqa: B008
 ):
     """
     Update multiple settings in the database
