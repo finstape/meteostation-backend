@@ -1,22 +1,23 @@
 """empty message
 
 Revision ID: 6b01625ca9a1
-Revises: 
+Revises:
 Create Date: 2025-05-21 18:33:41.409451
 
 """
 
-from typing import Sequence, Union
+from collections.abc import Sequence
+
+import sqlalchemy as sa
 
 from alembic import op
-import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
 revision: str = '6b01625ca9a1'
-down_revision: Union[str, None] = None
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+down_revision: str | None = None
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
@@ -30,15 +31,9 @@ def upgrade() -> None:
             server_default=sa.text('now()'),
             nullable=False,
         ),
-        sa.Column(
-            'temperature', sa.NUMERIC(precision=4, scale=1), nullable=False
-        ),
-        sa.Column(
-            'humidity', sa.NUMERIC(precision=4, scale=1), nullable=False
-        ),
-        sa.Column(
-            'pressure', sa.NUMERIC(precision=6, scale=1), nullable=False
-        ),
+        sa.Column('temperature', sa.NUMERIC(precision=4, scale=1), nullable=False),
+        sa.Column('humidity', sa.NUMERIC(precision=4, scale=1), nullable=False),
+        sa.Column('pressure', sa.NUMERIC(precision=6, scale=1), nullable=False),
         sa.Column('co2', sa.INTEGER(), nullable=False),
         sa.Column('tvoc', sa.INTEGER(), nullable=False),
         sa.PrimaryKeyConstraint('id', name=op.f('pk__central')),
@@ -52,23 +47,15 @@ def upgrade() -> None:
             server_default=sa.text('now()'),
             nullable=False,
         ),
-        sa.Column(
-            'weather_description', sa.VARCHAR(length=255), nullable=False
-        ),
+        sa.Column('weather_description', sa.VARCHAR(length=255), nullable=False),
         sa.Column(
             'temperature_feels_like',
             sa.NUMERIC(precision=4, scale=1),
             nullable=False,
         ),
-        sa.Column(
-            'precipitation', sa.NUMERIC(precision=4, scale=1), nullable=False
-        ),
-        sa.Column(
-            'uv_index', sa.NUMERIC(precision=3, scale=1), nullable=False
-        ),
-        sa.Column(
-            'wind_speed', sa.NUMERIC(precision=4, scale=1), nullable=False
-        ),
+        sa.Column('precipitation', sa.NUMERIC(precision=4, scale=1), nullable=False),
+        sa.Column('uv_index', sa.NUMERIC(precision=3, scale=1), nullable=False),
+        sa.Column('wind_speed', sa.NUMERIC(precision=4, scale=1), nullable=False),
         sa.PrimaryKeyConstraint('id', name=op.f('pk__external_weather')),
     )
     op.create_table(
@@ -80,15 +67,9 @@ def upgrade() -> None:
             server_default=sa.text('now()'),
             nullable=False,
         ),
-        sa.Column(
-            'temperature', sa.NUMERIC(precision=4, scale=1), nullable=False
-        ),
-        sa.Column(
-            'humidity', sa.NUMERIC(precision=4, scale=1), nullable=False
-        ),
-        sa.Column(
-            'pressure', sa.NUMERIC(precision=6, scale=1), nullable=False
-        ),
+        sa.Column('temperature', sa.NUMERIC(precision=4, scale=1), nullable=False),
+        sa.Column('humidity', sa.NUMERIC(precision=4, scale=1), nullable=False),
+        sa.Column('pressure', sa.NUMERIC(precision=6, scale=1), nullable=False),
         sa.PrimaryKeyConstraint('id', name=op.f('pk__outdoor')),
     )
     # ### end Alembic commands ###

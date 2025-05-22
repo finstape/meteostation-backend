@@ -19,16 +19,20 @@ alembic = "^1.13.1"
 uvicorn = "^0.34.2"
 asyncpg = "^0.29.0"
 psycopg = {extras = ["binary"], version = "^3.2.9"}
+joblib = "^1.5.0"
+pandas = "^2.2.3"
+scikit-learn = "^1.6.1"
+httpx = "^0.28.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.1"
 isort = "^5.13.2"
-black = "^24.8.0"
+black = "^25.1.0"
 pytest = "^7.4.0"
 
 [tool.black]
 line-length = 88
-target-version = ['py312']
+target-version = ["py312"]
 skip-string-normalization = true
 
 [tool.isort]
@@ -53,14 +57,13 @@ exclude = [
   ".bzr", ".direnv", ".eggs", ".git", ".git-rewrite", ".hg", ".ipynb_checkpoints", ".mypy_cache",
   ".nox", ".pants.d", ".pyenv", ".pytest_cache", ".pytype", ".ruff_cache", ".svn", ".tox", ".venv",
   ".vscode", "__pypackages__", "_build", "buck-out", "build", "dist", "node_modules", "site-packages", "venv",
-  ".gitignore", ".env", ".env.example", ".gitlab-ci.yml", ".toml", ".lock", "Makefile", ".md"
+  ".gitignore", ".env", ".env.example", ".toml", ".lock", "Makefile", ".md"
 ]
 
 [tool.ruff.lint]
 select = [
   "E",  # pycodestyle errors
   "F",  # pyflakes
-  "I",  # isort
   "B",  # bugbear
   "UP",  # pyupgrade
   "SIM",  # simplify

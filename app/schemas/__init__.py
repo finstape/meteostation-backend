@@ -1,1 +1,19 @@
-__all__ = []
+from app.schemas.setting import SettingPatchWithKey
+from app.schemas.weather import (
+    CentralData,
+    ExternalData,
+    SensorData,
+    WeatherCurrentResponse,
+    WeatherPredictionResponse,
+    WeatherUploadRequest,
+)
+
+__all__ = [
+    "SettingPatchWithKey",
+    "SensorData",
+    "CentralData",
+    "ExternalData",
+    "WeatherCurrentResponse",
+    "WeatherPredictionResponse",
+    "WeatherUploadRequest",
+]

@@ -38,10 +38,9 @@ help: ##@Help Show this help
 lint:  ##@Code Check code with ruff
 	poetry run ruff check . --fix
 
-format:  ##@Code Reformat code with ruff, isort, black
+format:  ##@Code Reformat code with isort, black
 	poetry run isort .
 	poetry run black .
-	poetry run ruff check --fix .
 
 db:  ##@Project Run server and database with docker-compose
 	docker-compose -f docker-compose.yml up -d --remove-orphans
