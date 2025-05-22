@@ -26,7 +26,7 @@ async def get_external_weather(session: AsyncSession) -> dict:
     lat = await get_setting_by_key(session, "latitude")
     lon = await get_setting_by_key(session, "longitude")
 
-    url = f"http://wttr.in/{lat},{lon}?format=j1"
+    url = f"http://wttr.in/{lat},{lon}?format=j1&lang=ru"
     async with httpx.AsyncClient(timeout=10.0) as client:
         response = await client.get(url)
         response.raise_for_status()
