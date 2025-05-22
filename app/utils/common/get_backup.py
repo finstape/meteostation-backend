@@ -1,6 +1,7 @@
+import os
 import subprocess
 import tempfile
-import os
+
 from fastapi.responses import FileResponse
 
 from app.config import get_settings
@@ -29,21 +30,25 @@ async def create_postgres_backup() -> FileResponse:
     result = subprocess.run(
         [
             "pg_dump",
-            "-h", db_host,
-            "-p", str(db_port),
-            "-U", db_user,
-            "-d", db_name,
-            "-F", "plain",
-            "-f", dump_path
+            "-h",
+            db_host,
+            "-p",
+            str(db_port),
+            "-U",
+            db_user,
+            "-d",
+            db_name,
+            "-F",
+            "plain",
+            "-f",
+            dump_path,
         ],
-        env=env
+        env=env,
     )
 
     if result.returncode != 0:
         raise RuntimeError("pg_dump failed to create backup")
 
     return FileResponse(
-        path=dump_path,
-        filename="backup.sql",
-        media_type="application/sql"
+        path=dump_path, filename="backup.sql", media_type="application/sql"
     )
