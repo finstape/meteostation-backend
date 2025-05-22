@@ -9,7 +9,9 @@ from app.schemas import (
     SensorData,
     WeatherCurrentResponse,
     WeatherPredictionResponse,
+    WeatherUploadRequest,
 )
+from app.utils.common import new_data_logic
 from app.utils.queries import get_last_data_for_sensors
 from app.utils.weather_predict import get_data_weather_prediction
 
@@ -23,8 +25,14 @@ api_router = APIRouter(tags=["Weather"])
     description="Get current weather",
 )
 async def get_current_weather(
-    session: AsyncSession = Depends(get_session),
+    session: AsyncSession = Depends(get_session), # noqa: B008
 ):
+    """
+    Get current weather data based on the last data
+
+    Args:
+        session (AsyncSession): The database session
+    """
     raw_data = await get_last_data_for_sensors(session)
 
     formatted_data = {
@@ -37,13 +45,39 @@ async def get_current_weather(
 
 
 @api_router.get(
-    "weather/predict",
+    "/weather/predict",
     status_code=status.HTTP_200_OK,
     response_model=WeatherPredictionResponse,
     description="Get weather prediction",
 )
 async def get_weather_prediction(
-    session: AsyncSession = Depends(get_session),
+    session: AsyncSession = Depends(get_session), # noqa: B008
 ):
+    """
+    Get weather prediction based on the last data
+
+    Args:
+        session (AsyncSession): The database session
+    """
     data = await get_data_weather_prediction(session)
     return WeatherPredictionResponse(**data)
+
+
+@api_router.post(
+    "/weather/upload",
+    status_code=status.HTTP_200_OK,
+    description="Upload data from sensors (central, outdoor, external)",
+)
+async def upload_weather_data(
+    payload: WeatherUploadRequest,
+    session: AsyncSession = Depends(get_session), # noqa: B008
+):
+    """
+    Upload weather data to the database
+
+    Args:
+        payload (WeatherUploadRequest): The data to be uploaded
+        session (AsyncSession): The database session
+    """
+    await new_data_logic(session=session, payload=payload)
+    return
