@@ -32,7 +32,7 @@ async def patch_multiple_settings(
 
 
 @api_router.get(
-    "settings/backup",
+    "/settings/backup",
     status_code=status.HTTP_200_OK,
     response_class=FileResponse,
     description="Get backup of database",
