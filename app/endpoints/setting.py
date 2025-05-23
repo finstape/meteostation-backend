@@ -1,9 +1,11 @@
 from fastapi import APIRouter, Depends
+from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from app.db.connection import get_session
 from app.schemas import SettingPatchWithKey
+from app.utils.common import create_postgres_backup
 from app.utils.queries import save_multiple_settings
 
 api_router = APIRouter(tags=["Setting"])
@@ -12,7 +14,7 @@ api_router = APIRouter(tags=["Setting"])
 @api_router.patch(
     "/settings",
     status_code=status.HTTP_200_OK,
-    description="Upload data from sensors (central, outdoor, external)",
+    description="Update multiple settings",
 )
 async def patch_multiple_settings(
     payload: list[SettingPatchWithKey],
@@ -27,3 +29,19 @@ async def patch_multiple_settings(
     """
     await save_multiple_settings(session, payload)
     return
+
+
+@api_router.get(
+    "/settings/backup",
+    status_code=status.HTTP_200_OK,
+    response_class=FileResponse,
+    description="Get backup of database",
+)
+async def get_backup():
+    """
+    Get a backup of the database via docker
+
+    Returns:
+        FileResponse: The backup file
+    """
+    return await create_postgres_backup()

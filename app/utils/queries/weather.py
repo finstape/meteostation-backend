@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any
 
 from sqlalchemy import desc, select
@@ -6,6 +7,27 @@ from sqlalchemy.orm import DeclarativeMeta
 
 from app.db.models import Central, ExternalWeather, Outdoor
 from app.schemas import WeatherUploadRequest
+
+
+async def fetch_part_data(
+    session: AsyncSession,
+    model: type[DeclarativeMeta],
+    time_threshold: datetime,
+) -> list[DeclarativeMeta]:
+    """
+    Fetch rows from a given model where created_at >= time_threshold.
+
+    Args:
+        session (AsyncSession): The database session
+        model (Type[DeclarativeMeta]): The SQLAlchemy model representing the table
+        time_threshold (datetime): The minimum timestamp for filtering records
+
+    Returns:
+        list: List of model instances
+    """
+    stmt = select(model).where(model.created_at >= time_threshold)
+    result = await session.execute(stmt)
+    return result.scalars().all()
 
 
 async def get_last_data(

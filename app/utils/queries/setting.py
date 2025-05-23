@@ -1,3 +1,4 @@
+from async_lru import alru_cache
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -5,11 +6,13 @@ from app.db.models import Setting
 from app.schemas import SettingPatchWithKey
 
 
+@alru_cache(maxsize=128)
 async def get_setting_by_key(
     session: AsyncSession, key: str
-) -> int | float | str | bool | None:
+) -> int | float | str | bool:
     """
     Get a setting value by its key and convert it to the specified type
+    This function caches the result for faster access in the future
 
     Args:
         session (AsyncSession): The database session
@@ -56,3 +59,4 @@ async def save_multiple_settings(
                 setattr(setting, field, value)
 
     await session.commit()
+    get_setting_by_key.cache_clear()
