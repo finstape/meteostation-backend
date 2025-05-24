@@ -65,26 +65,6 @@ async def get_weather_prediction(
     return WeatherPredictionResponse(**data)
 
 
-@api_router.post(
-    "/weather/upload",
-    status_code=status.HTTP_200_OK,
-    description="Upload data from sensors (central, outdoor, external)",
-)
-async def upload_weather_data(
-    payload: WeatherUploadRequest,
-    session: AsyncSession = Depends(get_session),  # noqa: B008
-):
-    """
-    Upload weather data to the database
-
-    Args:
-        payload (WeatherUploadRequest): The data to be uploaded
-        session (AsyncSession): The database session
-    """
-    await new_data_logic(session=session, payload=payload)
-    return
-
-
 @api_router.get(
     "/weather/interval",
     status_code=status.HTTP_200_OK,
@@ -102,10 +82,6 @@ async def get_sensor_poll_interval(
     """
     interval = await get_setting_by_key(session, "sensor_poll_interval_ms")
     return SensorInterval(sensor_poll_interval_ms=interval)
-
-
-# TODO: implement telegram
-# TODO: implement nginx
 
 
 @api_router.get(
@@ -126,3 +102,23 @@ async def get_weather_plot(
         hours (int): The number of hours to plot data for (default: 6, range: 1-168)
     """
     return await generate_weather_plot(session, hours)
+
+
+@api_router.post(
+    "/weather/upload",
+    status_code=status.HTTP_200_OK,
+    description="Upload data from sensors (central, outdoor, external)",
+)
+async def upload_weather_data(
+    payload: WeatherUploadRequest,
+    session: AsyncSession = Depends(get_session),  # noqa: B008
+):
+    """
+    Upload weather data to the database
+
+    Args:
+        payload (WeatherUploadRequest): The data to be uploaded
+        session (AsyncSession): The database session
+    """
+    await new_data_logic(session=session, payload=payload)
+    return
