@@ -1,5 +1,6 @@
 import io
 import math
+
 from datetime import datetime, timedelta
 
 import httpx
@@ -19,10 +20,41 @@ from app.utils.queries import (
     save_external_weather,
 )
 
+WEATHER_CODES = {
+    0: "Ясно",
+    1: "Преимущественно ясно",
+    2: "Переменная облачность",
+    3: "Пасмурно",
+    45: "Туман",
+    48: "Туман с изморозью",
+    51: "Лёгкая морось",
+    53: "Морось",
+    55: "Сильная морось",
+    61: "Небольшой дождь",
+    63: "Умеренный дождь",
+    65: "Сильный дождь",
+    71: "Небольшой снег",
+    73: "Снег",
+    75: "Сильный снег",
+    80: "Кратковременные ливни",
+    95: "Гроза",
+    96: "Гроза с мелким градом",
+    99: "Гроза с сильным градом",
+}
+
+
+def find_nearest_hour_index(time_list):
+    now = datetime.utcnow().replace(minute=0, second=0, microsecond=0)
+    now_hour = now.isoformat()[:13]  # "2025-05-23T19"
+    for i, t in enumerate(time_list):
+        if t.startswith(now_hour):
+            return i
+    return -1
+
 
 async def get_external_weather(session: AsyncSession) -> dict:
     """
-    Fetches the current weather data from the wttr.in API
+    Fetches the current weather data from the open-meteo.com API
     based on latitude, longitude settings
 
     Args:
@@ -32,32 +64,40 @@ async def get_external_weather(session: AsyncSession) -> dict:
         Dict: A dictionary containing the weather description, feels like temperature,
               precipitation, UV index, and wind speed in m/s
     """
-
     lat = await get_setting_by_key(session, "latitude")
     lon = await get_setting_by_key(session, "longitude")
 
-    url = f"http://wttr.in/{lat},{lon}?format=j1&lang=ru"
+    url = (
+        f"https://api.open-meteo.com/v1/forecast"
+        f"?latitude={lat}&longitude={lon}"
+        f"&current_weather=true"
+        f"&hourly=apparent_temperature,precipitation,uv_index"
+        f"&timezone=UTC"
+    )
+
     async with httpx.AsyncClient(timeout=10.0) as client:
         response = await client.get(url)
-        response.raise_for_status()
         data = response.json()
 
-    current = data["current_condition"][0]
+    current = data.get("current_weather", {})
+    hourly = data.get("hourly", {})
+    time_list = hourly.get("time", [])
 
-    # Parse the data
-    description = current.get("lang_ru", [{"value": "Нет данных"}])[0]["value"]
-    feels_like = current["FeelsLikeC"]
-    precip_mm = current["precipMM"]
-    uv_index = current["uvIndex"]
-    wind_kmph = float(current["windspeedKmph"])
-    wind_mps = round(wind_kmph / 3.6, 1)
+    index = find_nearest_hour_index(time_list)
+
+    def get_hourly_value(key):
+        if index >= 0 and key in hourly:
+            return hourly[key][index]
+        return None
 
     return {
-        "weather_description": description,
-        "temperature_feels_like": feels_like,
-        "precipitation": precip_mm,
-        "uv_index": uv_index,
-        "wind_speed": wind_mps,
+        "weather_description": WEATHER_CODES.get(
+            current.get("weathercode"), "Нет данных"
+        ),
+        "temperature_feels_like": get_hourly_value("apparent_temperature"),
+        "precipitation": get_hourly_value("precipitation"),
+        "uv_index": get_hourly_value("uv_index"),
+        "wind_speed": current.get("windspeed"),
     }
 
 
@@ -78,7 +118,10 @@ async def new_data_logic(
     tvoc_alert_threshold = await get_setting_by_key(session, "tvoc_alert_threshold")
     co2_alert_threshold = await get_setting_by_key(session, "co2_alert_threshold")
 
-    if payload.tvoc > tvoc_alert_threshold or payload.co2 > co2_alert_threshold:
+    if (
+        payload.central.tvoc > tvoc_alert_threshold
+        or payload.central.co2 > co2_alert_threshold
+    ):
         # TODO: implement notification logic
         pass
 

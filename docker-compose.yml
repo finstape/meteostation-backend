@@ -1,6 +1,21 @@
 version: "3.8"
 
 services:
+  nginx:
+    container_name: "nginx"
+    image: nginx:1.23-alpine
+    restart: always
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/nginx/private.key:/etc/nginx/private.key
+      - ./docker/nginx/cert.pem:/etc/nginx/cert.pem
+    ports:
+      - "8080:8080"
+    depends_on:
+      - server
+    networks:
+      - app-network
+
   db:
     container_name: "db"
     image: postgres:13.0-alpine
