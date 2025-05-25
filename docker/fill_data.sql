@@ -1,10 +1,5 @@
 DO $$
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM settings WHERE key = 'admin_telegram_id') THEN
-        INSERT INTO settings (key, value, type)
-        VALUES ('admin_telegram_id', '12345678', 'int');
-    END IF;
-
     IF NOT EXISTS (SELECT 1 FROM settings WHERE key = 'latitude') THEN
         INSERT INTO settings (key, value, type)
         VALUES ('latitude', '59.881234', 'float');
@@ -28,6 +23,16 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM settings WHERE key = 'tvoc_alert_threshold') THEN
         INSERT INTO settings (key, value, type)
         VALUES ('tvoc_alert_threshold', '150', 'int');
+    END IF;
+    
+    IF NOT EXISTS (SELECT 1 FROM settings WHERE key = 'telegram_bot_token') THEN
+        INSERT INTO settings (key, value, type)
+        VALUES ('telegram_bot_token', 'token', 'str');
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM settings WHERE key = 'telegram_webhook_url') THEN
+        INSERT INTO settings (key, value, type)
+        VALUES ('telegram_webhook_url', 'https://your.domain.com/api/v1/webhook', 'str');
     END IF;
 END
 $$;
