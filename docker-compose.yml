@@ -10,8 +10,8 @@ services:
       - ./docker/nginx/privkey.pem:/etc/nginx/privkey.pem
       - ./docker/nginx/cert.pem:/etc/nginx/cert.pem
     ports:
-      - "8080:8080"
-      - "8443:8443"
+      - "80:80"
+      - "443:443"
     depends_on:
       - server
     networks:
