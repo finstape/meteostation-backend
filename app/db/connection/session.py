@@ -40,7 +40,8 @@ async def get_session() -> AsyncSession:
 @asynccontextmanager
 async def session_context():
     """
-    A context manager for getting AsyncSession manually (used outside FastAPI, e.g. in aiogram handlers)
+    A context manager for getting AsyncSession manually
+    (used outside FastAPI, e.g. in aiogram handlers)
     """
     gen = get_session()
     session = await gen.__anext__()
