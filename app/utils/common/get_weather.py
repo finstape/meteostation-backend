@@ -19,6 +19,7 @@ from app.utils.queries import (
     insert_sensor_data,
     save_external_weather,
 )
+from app.utils.telegram import get_bot
 
 WEATHER_CODES = {
     0: "Ясно",
@@ -122,8 +123,15 @@ async def new_data_logic(
         payload.central.tvoc > tvoc_alert_threshold
         or payload.central.co2 > co2_alert_threshold
     ):
-        # TODO: implement notification logic
-        pass
+        admin_telegram_id = await get_setting_by_key(session, "telegram_admin_id")
+        bot = get_bot()
+
+        await bot.send_message(
+            admin_telegram_id,
+            f"⚠️ Внимание! Обнаружен высокий уровень загрязнения:\n"
+            f"CO₂: {payload.central.co2} ppm\n"
+            f"TVOC: {payload.central.tvoc} ppb",
+        )
 
     external_weather = await get_external_weather(session)
     await save_external_weather(session, external_weather)

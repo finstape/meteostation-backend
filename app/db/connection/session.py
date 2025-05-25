@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -35,6 +37,21 @@ async def get_session() -> AsyncSession:
         yield session
 
 
+@asynccontextmanager
+async def session_context():
+    """
+    A context manager for getting AsyncSession manually
+    (used outside FastAPI, e.g. in aiogram handlers)
+    """
+    gen = get_session()
+    session = await gen.__anext__()
+    try:
+        yield session
+    finally:
+        await session.aclose()
+
+
 __all__ = [
     "get_session",
+    "session_context",
 ]
