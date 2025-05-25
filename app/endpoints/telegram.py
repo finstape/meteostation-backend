@@ -17,7 +17,6 @@ api_router = APIRouter(tags=["Telegram"])
 )
 async def webhook_handler(
     request: Request,
-    session: AsyncSession = Depends(get_session),  # noqa: B008
 ):
     """ """
     data = await request.json()
