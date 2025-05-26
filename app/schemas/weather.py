@@ -45,7 +45,6 @@ class WeatherUploadRequest(BaseModel):
     outdoor: SensorData
 
 
-
 class SensorInterval(BaseModel):
     sensor_poll_interval_ms: int = Field(
         ..., title="Sensor polling interval in milliseconds"

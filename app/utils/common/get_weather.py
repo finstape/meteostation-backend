@@ -129,8 +129,8 @@ async def new_data_logic(
         await bot.send_message(
             chat_id=int(admin_telegram_id),
             text=f"⚠️ Внимание! Обнаружен высокий уровень загрязнения:\n"
-                 f"CO₂: {payload.central.co2} ppm\n"
-                 f"TVOC: {payload.central.tvoc} ppb",
+            f"CO₂: {payload.central.co2} ppm\n"
+            f"TVOC: {payload.central.tvoc} ppb",
         )
 
     external_weather = await get_external_weather(session)

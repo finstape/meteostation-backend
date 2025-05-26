@@ -122,6 +122,7 @@ async def plot_handler(message: types.Message):
     try:
         async with session_context() as session:
             from app.utils.common import generate_weather_plot
+
             response = await generate_weather_plot(session, hours)
             tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".png")
             async for chunk in response.body_iterator:
