@@ -44,8 +44,6 @@ class WeatherUploadRequest(BaseModel):
     central: CentralData
     outdoor: SensorData
 
-    class Config:
-        from_attributes = True
 
 
 class SensorInterval(BaseModel):

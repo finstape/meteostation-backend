@@ -123,14 +123,14 @@ async def new_data_logic(
         payload.central.tvoc > tvoc_alert_threshold
         or payload.central.co2 > co2_alert_threshold
     ):
-        admin_telegram_id = await get_setting_by_key(session, "telegram_admin_id")
+        admin_telegram_id = await get_setting_by_key(session, "admin_telegram_id")
         bot = get_bot()
 
         await bot.send_message(
-            admin_telegram_id,
-            f"⚠️ Внимание! Обнаружен высокий уровень загрязнения:\n"
-            f"CO₂: {payload.central.co2} ppm\n"
-            f"TVOC: {payload.central.tvoc} ppb",
+            chat_id=int(admin_telegram_id),
+            text=f"⚠️ Внимание! Обнаружен высокий уровень загрязнения:\n"
+                 f"CO₂: {payload.central.co2} ppm\n"
+                 f"TVOC: {payload.central.tvoc} ppb",
         )
 
     external_weather = await get_external_weather(session)
